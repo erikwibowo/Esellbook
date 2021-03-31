@@ -38,7 +38,7 @@ public class Helper {
                                     .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                            Intent intent = new Intent(Settings.ACTION_APPLICATION_SETTINGS);
                                             context.startActivity(intent);
                                         }
                                     })
