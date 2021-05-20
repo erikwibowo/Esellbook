@@ -1,7 +1,9 @@
 package com.luwakode.e_sellbook.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
@@ -18,8 +20,17 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
+import com.google.firebase.ml.vision.text.FirebaseVisionTextDetector;
 import com.luwakode.e_sellbook.BuildConfig;
+import com.luwakode.e_sellbook.R;
 import com.luwakode.e_sellbook.databinding.ActivityPindaiBinding;
 import com.luwakode.e_sellbook.databinding.ActivitySplashBinding;
 import com.luwakode.e_sellbook.helper.PrefManager;
@@ -30,6 +41,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class Pindai extends AppCompatActivity {
@@ -63,6 +75,7 @@ public class Pindai extends AppCompatActivity {
             public void onClick(View v) {
                 binding.linearButton.setVisibility(View.GONE);
                 binding.foto.setVisibility(View.GONE);
+                binding.hasil.setVisibility(View.GONE);
                 binding.cardCamera.setVisibility(View.VISIBLE);
             }
         });
@@ -146,6 +159,7 @@ public class Pindai extends AppCompatActivity {
                     Log.e("CAMERA", fileUri.getPath());
 
                     bitmap = BitmapFactory.decodeFile(fileUri.getPath());
+                    detectTextFromImage(bitmap);
                     setToImageView(getResizedBitmap(bitmap, 512));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -179,5 +193,46 @@ public class Pindai extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    private void detectTextFromImage(Bitmap bitmap) {
+        FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
+        FirebaseVisionTextDetector firebaseVisionTextDetector = FirebaseVision.getInstance().getVisionTextDetector();
+        firebaseVisionTextDetector.detectInImage(firebaseVisionImage).addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
+            @Override
+            public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                displayTextFromImage(firebaseVisionText);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(Pindai.this, "Error : "+ e.getMessage(), Toast.LENGTH_LONG);
+                Log.d("Error : ", e.getMessage());
+            }
+        });
+    }
+
+    private void displayTextFromImage(FirebaseVisionText firebaseVisionText) {
+        List<FirebaseVisionText.Block> blockList = firebaseVisionText.getBlocks();
+        if (blockList.size() == 0){
+            snackBar("Tidak ada text ditemukan", R.color.error);
+            binding.btnSimpan.setVisibility(View.GONE);
+        }else{
+            for (FirebaseVisionText.Block block : firebaseVisionText.getBlocks()){
+                String text = block.getText();
+                binding.hasil.setVisibility(View.VISIBLE);
+                binding.hasil.setText(text);
+                Log.d("Hasil : ", text);
+                binding.btnSimpan.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private void snackBar(String pesan, int warna){
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), pesan, Snackbar.LENGTH_LONG)
+                .setAction("Action", null);
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), warna));
+        snackbar.show();
     }
 }

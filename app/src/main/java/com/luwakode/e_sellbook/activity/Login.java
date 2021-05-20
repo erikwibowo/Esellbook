@@ -48,6 +48,7 @@ public class Login extends AppCompatActivity {
         prefManager = new PrefManager(this);
         if (prefManager.getBoolean("login")){
             startActivity(new Intent(Login.this, MainActivity.class));
+            finish();
         }
         dialog = new SpotsDialog.Builder()
                 .setContext(this)

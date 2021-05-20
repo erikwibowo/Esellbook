@@ -40,7 +40,14 @@
             android:visibility="gone"
             android:id="@+id/foto"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="400dp"/>
+        <TextView
+            android:id="@+id/hasil"
+            android:visibility="gone"
+            android:layout_below="@+id/foto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="hasil"/>
         <LinearLayout
             android:id="@+id/linear_button"
             android:visibility="gone"
@@ -54,11 +61,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="#D32F2F"
+                android:textColor="@color/white"
                 android:layout_marginRight="5dp"
-                android:text="Batal"/>
+                android:text="Ambil lagi"/>
             <Button
                 android:id="@+id/btn_simpan"
                 android:layout_width="0dp"
+                android:visibility="gone"
                 android:layout_marginLeft="5dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

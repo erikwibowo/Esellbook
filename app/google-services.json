@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "221651205019",
+    "project_id": "ocr-sellbook",
+    "storage_bucket": "ocr-sellbook.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221651205019:android:19f7c616afb07b6863ff3e",
+        "android_client_info": {
+          "package_name": "com.luwakode.e_sellbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221651205019-os94b9alf7on9tb7f1ck2i916601991a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIwNxbWXIGsUPL5XAiknRFnc6IP97h6bM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "221651205019-os94b9alf7on9tb7f1ck2i916601991a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
